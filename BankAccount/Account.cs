@@ -9,7 +9,7 @@ namespace BankAccount {
     /// <summary>
     /// represents a single users bank account
     /// </summary>
-    internal class Account {
+    public class Account {
 
         /// <summary>
         /// Create account with specific owner and balance of zero
@@ -33,18 +33,24 @@ namespace BankAccount {
         /// specified positive amount of money to account 
         /// </summary>
         /// <param name="amount"></param>
-        /// <exception cref="NotImplementedException">positive number</exception>
-        public void Deposit (double amount) {
-            throw new NotImplementedException();
+        /// <exception cref="NotImplementedException">takes positive number and returns new balance after adding</exception>
+        public double Deposit(double amount) {
+
+            if(amount <= 0) {
+                throw new ArgumentOutOfRangeException("Amount must be more than 0.00");
+            }
+            Balance += amount;
+            return Balance;
         }
 
         /// <summary>
         /// amount of money from balance
         /// </summary>
         /// <param name="amount">positive number</param>
-        /// <exception cref="NotImplementedException"></exception>
-        public void Withdraw(double amount) {
-            throw new NotImplementedException();
+        /// <exception cref="NotImplementedException">returns updated balance</exception>
+        public double Withdraw(double amount) {
+            Balance -= amount;
+            return Balance;
         }
     }
 }
