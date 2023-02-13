@@ -49,6 +49,16 @@ namespace BankAccount {
         /// <param name="amount">positive number</param>
         /// <exception cref="NotImplementedException">returns updated balance</exception>
         public double Withdraw(double amount) {
+
+
+            if (amount > Balance) {
+                throw new ArgumentException($"{nameof(amount)} cannot be greater than {nameof(Balance)}");
+            }
+
+            if (amount <= 0) {
+                throw new ArgumentOutOfRangeException($"{nameof(amount)} must be greater than zero");
+            }
+
             Balance -= amount;
             return Balance;
         }
