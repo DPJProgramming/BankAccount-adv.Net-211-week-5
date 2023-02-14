@@ -19,6 +19,7 @@ namespace BankAccount.Tests {
 
         [TestMethod()]
         [DataRow(100)]
+        [TestCategory("Deposit")]
         public void Deposit_APositiveAmount_AddToBalance(double amount) {
 
             acc.Deposit(amount);
@@ -27,6 +28,7 @@ namespace BankAccount.Tests {
         }
 
         [TestMethod]
+        [TestCategory("Deposit")]
         public void Deposit_APositiveAmount_ReturnsUpdatedBalance() {
 
             double depositAmount = 100;
@@ -40,17 +42,14 @@ namespace BankAccount.Tests {
         [TestMethod]
         [DataRow(-1)]
         [DataRow(0)]
+        [TestCategory("Deposit")]
         public void Deposit_ZeroOrLess_ThrowsArguementException(double invalidDepositAmount) {
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => acc.Deposit(invalidDepositAmount));
         }
 
-        //Withdraw 0
-        //withdraw negetive amount
-        //withdrawing a positive amount
-        //withdrawing more than balance
-
         [TestMethod]
+        [TestCategory("Withdraw")]
         public void Withdraw_PositiveAmount_DecreasesBalance() {
             //Arrange
             double initialDeposit = 100;
@@ -70,6 +69,7 @@ namespace BankAccount.Tests {
         [TestMethod]
         [DataRow(100, 50)]
         [DataRow(50, 12.50)]
+        [TestCategory("Withdraw")]
         public void Withdraw_PositiveAmount_ReturnUpdatedBalance(double initialDeposit, double withdrawalAmount) {
             //arrange
             double expectedBalance = initialDeposit - withdrawalAmount;
@@ -86,15 +86,49 @@ namespace BankAccount.Tests {
         [DataRow (0)]
         [DataRow (-1)]
         [DataRow (-1000)]
+        [TestCategory("Withdraw")]
         public void Withdraw_ZeroOrLess_ThrowsArguementNotFoundException(double withdrawAmount) {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => acc.Withdraw(withdrawAmount));
         }
 
         [TestMethod]
+        [TestCategory("Withdraw")]
         public void Withdraw_MoreThanAvailableBalance_ThrowsArguementsException() {
             double withdrawalAmount = 1000;
             Assert.ThrowsException<ArgumentException>(() => acc.Withdraw(withdrawalAmount));
 
+        }
+
+        [TestMethod]
+        [TestCategory("Owner")]
+        public void Owner_SetAsNull_ThrowsArguementException() {
+            
+            Assert.ThrowsException<ArgumentNullException>(() => acc.Owner = null);
+        }
+
+        [TestMethod]
+        [TestCategory("Owner")]
+        public void Owner_SetAsWhiteSpaceOrEmptyString_ThrowsArgumentException() {
+            Assert.ThrowsException<ArgumentException>(() => acc.Owner = String.Empty);
+            Assert.ThrowsException<ArgumentException>(() => acc.Owner = "");
+        }
+
+        [TestMethod]
+        [TestCategory("Owner")]
+        [DataRow("David")]
+        [DataRow("David Jarvis")]
+        [DataRow("kndnerbtrsntrb")]
+        public void Owner_SetAsUpTo20Characters_SetsSuccessfully(string ownerName) {
+            acc.Owner = ownerName;
+            Assert.AreEqual(ownerName, acc.Owner);
+        }
+
+        [TestMethod]
+        [TestCategory("Owner")]
+        [DataRow("David 2")]
+        [DataRow("@#$%")]
+        public void Owner_InvalidOwnerName_ThrowsArgumentException(string ownerName) {
+            Assert.ThrowsException<ArgumentException>(() => acc.Owner = ownerName);
         }
     }
 }

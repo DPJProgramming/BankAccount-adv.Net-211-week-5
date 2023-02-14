@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BankAccount {
@@ -10,6 +11,7 @@ namespace BankAccount {
     /// represents a single users bank account
     /// </summary>
     public class Account {
+        private string owner;
 
         /// <summary>
         /// Create account with specific owner and balance of zero
@@ -22,7 +24,52 @@ namespace BankAccount {
         /// <summary>
         /// account holders first and last name
         /// </summary>
-        public string? Owner { get; set; }
+        public string? Owner {
+            get { return owner; }
+            set {
+                if (value == null) {
+                    throw new ArgumentNullException("Owner cannot be null");
+                }
+
+                if(value.Trim() == string.Empty) {
+                    throw new ArgumentException($"{nameof(Owner)} must have text");
+                }
+
+                if (ValidOwnerName(value)) {
+                    owner = value;
+                }
+
+                else {
+                    throw new ArgumentException($"{nameof(Owner)} can only contain letters (spaces allowed).");
+
+                } 
+            }
+        }
+
+        /// <summary>
+        /// Checks if owner name is < 20 characters a-z and white space is allowed
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        private bool ValidOwnerName(string ownerName) {
+            char[] validCharacters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
+            
+            ownerName= ownerName.ToLower();
+
+            const int MaxLengthOwnerName = 20;
+
+            if(ownerName.Length > MaxLengthOwnerName) {
+                return false;
+            }
+
+            foreach (char letter in ownerName) {
+                if (letter != ' ' && !validCharacters.Contains(letter)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// amount of money currently held in account
